@@ -1,2 +1,2 @@
 # ap-mapmaker
-生成游戏世界地图
+使用 python 生成世界地图
