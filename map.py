@@ -2,11 +2,8 @@ import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import numpy as np
-from shapely.geometry import Point, MultiPolygon, LineString
-from shapely.prepared import prep
-from rtree import index
+from shapely.geometry import Point
 import time
-from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
 # 1. 创建网格点
@@ -41,13 +38,14 @@ def map():
 
     fig = plt.figure(figsize=(30, 15))
     ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
+
     ax.axis('off')
     ax.set_extent([-180, 180, -60, 90])
     ax.add_feature(cfeature.BORDERS, edgecolor='gray', linewidth=1,linestyle=':', alpha=0.5)
 
     lands = list(cfeature.LAND.geometries())
     borders = list(cfeature.BORDERS.geometries())
-    land_points = create_grid_points(lands, borders, 8, 0.4)
+    land_points = create_grid_points(lands, borders, 8, 0.6)
 
     if land_points:
         xs_land, ys_land = zip(*land_points)
@@ -56,7 +54,7 @@ def map():
         print("没有找到陆地点")
     
     svg_path = 'world_map_dotted.png'
-    plt.savefig(svg_path, format='png', dpi=400, bbox_inches=None,pad_inches=0)
+    plt.savefig(svg_path, format='png', dpi=400, bbox_inches='tight', pad_inches=0)
     plt.show()
     return ax
 

@@ -46,13 +46,14 @@ class PassengerSimulator:
                     to_passengers_count_times[to_code] = i
             remaining_passengers = capacity - base_passengers * (airport_count-1)
             cal_times = max(to_passengers_count_times.values())
-            random_factor = 0.8 / cal_times / len(passengers[from_code])
+            random_factor = 0.5 / cal_times / len(passengers[from_code])
 
             for i in range(cal_times):
                 if remaining_passengers <= 0:
                     break
                 for to_code in passengers[from_code]:
                     random_adjustment = random.uniform(0, random_factor)
+                    random_factor *= 1.2
                     if to_passengers_count_times[to_code] >= i and remaining_passengers > 0:
                         random_passengers = min(int(capacity * random_adjustment), remaining_passengers)
                         passengers[from_code][to_code] += random_passengers
