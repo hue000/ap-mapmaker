@@ -4,7 +4,6 @@ from collections import defaultdict, OrderedDict
 class PassengerSimulator:
     def __init__(self):
         self.base_passenger_rate = 0.6  # 基础旅客率
-        self.random_factor = 0.1  # 随机因子,用于增加变化性
         
     def simulator_routes_passengers(self, routes, airports):
         routes_passengers = {}
@@ -13,16 +12,29 @@ class PassengerSimulator:
             if from_code not in routes_passengers:
                 routes_passengers[from_code] = {}
             to_airports_count = len(routes[from_code])
+            
             base_passengers = int(self.base_passenger_rate * airports[from_code].capacity/to_airports_count)    
-
+            remaining_passengers = airports[from_code].capacity - base_passengers * to_airports_count  
             to_capacity = {}
             for to_code in routes[from_code]:
                 to_capacity[to_code] = airports[to_code].capacity
             
+
             sorted_capacity = sorted(to_capacity.items(), key=lambda x: x[1])
-            print(sorted_capacity)
-      
+
+            random_factor = 1 / (to_airports_count + 1) / to_airports_count 
             
+            while remaining_passengers > 1000:
+                for i, (to_code, capacity) in enumerate(sorted_capacity):
+                    passengers = min(remaining_passengers, int(remaining_passengers * random.uniform(random_factor/2, random_factor)) * (i+1))
+                    if to_code not in routes_passengers[from_code]:
+                        routes_passengers[from_code][to_code] = base_passengers
+                    routes_passengers[from_code][to_code] += passengers
+                    remaining_passengers -= passengers
+
+
+        
+        print(routes_passengers)   
         return routes_passengers
 
     def create_sorted_airport_capacity_set(self):

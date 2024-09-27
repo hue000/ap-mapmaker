@@ -23,7 +23,7 @@ AIRPORT_INFO = {
     "XIY": {"name": "西安咸阳国际机场", "coords": (34.4462, 108.7505), "city": "西安", "country": "中国", "capacity": 1000000, "runway_count": 2, "takeoff_landing_interval": 15},
     "HGH": {"name": "杭州萧山国际机场", "coords": (30.2294, 120.4328), "city": "杭州", "country": "中国", "capacity": 1000000, "runway_count": 2, "takeoff_landing_interval": 15},  
     "NKG": {"name": "南京禄口国际机场", "coords": (31.7420, 118.8618), "city": "南京", "country": "中国", "capacity": 1000000, "runway_count": 2, "takeoff_landing_interval": 15},
-    "SZX": {"name": "深圳宝安国际机场", "coords": (22.6397, 113.8948), "city": "深圳", "country": "中国", "capacity": 800000, "runway_count": 2, "takeoff_landing_interval": 15},
+    "SZX": {"name": "深圳宝安国际机场", "coords": (22.6397, 113.8948), "city": "深圳", "country": "中国", "capacity": 80000, "runway_count": 2, "takeoff_landing_interval": 15},
     "KMG": {"name": "昆明长水国际机场", "coords": (25.2183, 102.7900), "city": "昆明", "country": "中国", "capacity": 1000000, "runway_count": 2, "takeoff_landing_interval": 15},
     "CKG": {"name": "重庆江北国际机场", "coords": (29.7092, 106.6300), "city": "重庆", "country": "中国", "capacity": 1000000, "runway_count": 2, "takeoff_landing_interval": 15},
     "CSX": {"name": "长沙黄花国际机场", "coords": (28.1435, 113.2192), "city": "长沙", "country": "中国", "capacity": 1000000, "runway_count": 2, "takeoff_landing_interval": 15},
@@ -42,6 +42,7 @@ class IATA:
         self.aircrafts = {}
         self.airlines = {}
         self.aircrafts_counter = {}
+        self.flights_scheduled = {}
     
     def add_airport(self, airport):
         self.airports[airport.airport_code] = airport
@@ -51,7 +52,6 @@ class IATA:
         self.aircrafts[aircraft_id] = Aircraft(aircraft_id, model, airline_code, first_class_capacity, business_class_capacity, economy_class_capacity)
         return aircraft_id
 
-        
     def calculate_flight_time(self, form_code, to_code):
         upload_time = 20
         download_time = 20
@@ -102,6 +102,12 @@ class IATA:
         self.routes[flight.from_code][flight.to_code] = self.calculate_flight_time(flight.from_code,flight.to_code)
         self.routes[flight.to_code][flight.from_code] = self.calculate_flight_time(flight.to_code,flight.from_code)
         
+    def add_flight_schedule(self, flight):
+        if flight.flight_id not in self.flights_scheduled:
+            self.flights_scheduled[flight.flight_id] = flight
+            return True
+        return False
+
     def add_route(self, from_airport, to_airport):
         if from_airport not in self.routes:
             self.routes[from_airport] = {}

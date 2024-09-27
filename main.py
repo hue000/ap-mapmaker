@@ -1,11 +1,5 @@
 import game
 
-
-
-def create_aircraft(game,airline_name,model,first_class_capacity,business_class_capacity,economy_class_capacity):
-    game.add_aircraft(airline_name,model,first_class_capacity,business_class_capacity,economy_class_capacity)
-
-
 if __name__ == "__main__":
 
     # 创建游戏
@@ -27,11 +21,10 @@ if __name__ == "__main__":
     for airline_name,airline_code in AIRLINE_NAME.items():
         game.add_airlines(airline_name,airline_code)
 
-    # 创建飞机
-    airline_id = create_aircraft(game,"CA","A320",20,30,130)  
-
-
-
+    airline_id = game.add_aircraft("CA","A320",20,30,130)
     game.add_flight("CA","CA001","PEK","HRB",airline_id,1000,800,500,"08:00")
-
-    print(game.get())
+    game.add_flight("CA","CA002","PEK","CAN",airline_id,1000,800,500,"08:00")
+    game.add_flight("CA","CA003","PEK","PVG",airline_id,1000,800,500,"08:00")
+    game.add_flight("CA","CA004","PEK","SHA",airline_id,1000,800,500,"08:00")
+    game.game_start()
+ 
